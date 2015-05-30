@@ -1,0 +1,4 @@
+<li class="card rank-{{ attrs.rank.downcase }} {{ attrs.suit }}">
+  <span class="rank">{{ attrs.rank }}</span>
+  <span class="suit">{{ ("&"+ attrs.suit + ";").html_safe }}</span>
+</li>

@@ -2,7 +2,26 @@
   Home
 
 <:Body>
-  <h1>You've got {{ page._game._score }} points</h1>
-  <p>The dealer's hand is: {{ page._game.dealer_hand.map{|c| c.to_s } }}</p>
-  <p>Your hand is: {{ page._game.player_hand.map{|c| c.to_s } }}</p>
-
+  <h1>{{ page._game._score }} points</h1>
+  <div class="card-set">
+    <strong>Dealer:</strong>
+    <ul class="playingCards table">
+      <!-- Show the back of his first card -->
+      <li class="card back">*</li>
+      <:card rank="{{ page._game._dealer_hand.last._rank }}"
+            suit="{{ page._game._dealer_hand.last._suit }}"
+      />
+    </ul>
+  </div>
+  <div class="card-set">
+    <strong>Your hand:</strong>
+    <ul class="playingCards table">
+      <div class="hand-lineup">
+        {{ page._game._player_hand.each do |card| }}
+          <:card rank="{{ card._rank }}"
+                suit="{{ card._suit }}"
+          />
+        {{ end }}
+      </div>
+    </ul>
+  </div>
