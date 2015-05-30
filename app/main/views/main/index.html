@@ -2,5 +2,7 @@
   Home
 
 <:Body>
-  <h1>Home</h1>
+  <h1>You've got {{ page._game._score }} points</h1>
+  <p>The dealer's hand is: {{ page._game.dealer_hand.map{|c| c.to_s } }}</p>
+  <p>Your hand is: {{ page._game.player_hand.map{|c| c.to_s } }}</p>
 

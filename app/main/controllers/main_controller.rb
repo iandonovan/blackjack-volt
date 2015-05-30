@@ -2,7 +2,7 @@
 module Main
   class MainController < Volt::ModelController
     def index
-      # Add code for when the index view is loaded
+      page._game = Game.new(score: 0).deal_hands
     end
 
     def about
