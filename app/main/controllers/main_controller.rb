@@ -2,23 +2,27 @@
 module Main
   class MainController < Volt::ModelController
     def index
-      page._player = Player.new(wins: 0, losses: 0)
-      page._game = Game.new.deal_hands
+      player = Player.new(wins: 0, losses: 0)
+      page._game = Game.new(player: player).deal_hands
     end
 
     def hit
-      page._game.deal_card_to(page._game.player_cards)
+      page._game.deal_card_to(page._game.player.cards)
     end
 
     def total(hand)
       page._game.total(hand)
     end
 
-    def reset_game
-      page._player.losses += 1
-      page._game.deal_hands
+    def computer_turn
+      page._game.computer_turn
     end
 
+    def reset_game
+      page._game.player.losses += 1
+      page._game.winner_string = "Computer wins!"
+      page._game.deal_hands
+    end
 
     private
 

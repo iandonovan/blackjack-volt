@@ -2,22 +2,35 @@
   Home
 
 <:Body>
-  <h1>You are {{ page._player.wins }} and {{ page._player.losses }}</h1>
+  {{ if page._game.winner_string.present? }}
+    <div class="alert alert-info">
+      <a href="#" class="close" data-dismiss="alert">&times;</a>
+      <p>{{ page._game.winner_string }}</p>
+    </div>
+  {{ end }}
+
+  <h1>You are {{ page._game.player.wins }} and {{ page._game.player.losses }}</h1>
   <div class="card-set">
     <strong>Dealer:</strong>
     <ul class="playingCards simpleCards table">
-      <!-- Show the back of his first card -->
-      <li class="card back">*</li>
-      <:card rank="{{ page._game.dealer_cards.last.rank }}"
-            suit="{{ page._game.dealer_cards.last.suit }}"
-      />
+      <div class="hand-lineup">
+        {{ page._game.cards.each_with_index do |card, i| }}
+          {{ if i == 0 && page._game.player_turn? }}
+            <li class="card back">*</li>
+          {{ else }}
+            <:card rank="{{ card.rank }}"
+                suit="{{ card.suit }}"
+            />
+          {{ end }}
+        {{ end }}
+      </div>
     </ul>
   </div>
   <div class="card-set">
-    <strong>Your hand: ({{ total(page._game.player_cards) }})</strong>
+    <strong>Your hand: ({{ total(page._game.player.cards) }})</strong>
     <ul class="playingCards simpleCards table">
       <div class="hand-lineup">
-        {{ page._game.player_cards.each do |card| }}
+        {{ page._game.player.cards.each do |card| }}
           <:card rank="{{ card.rank }}"
                 suit="{{ card.suit }}"
           />
@@ -25,9 +38,10 @@
       </div>
     </ul>
   </div>
-  {{ if total(page._game.player_cards) <= 21 }}
+  {{ if total(page._game.player.cards) <= 21 }}
     <button class="btn btn-default" e-click="hit">Hit</button>
+    <button class="btn btn-default" e-click="computer_turn">Stand pat</button>
   {{ else }}
     <button class="btn btn-default" e-click="reset_game">Play again</button>
   {{ end }}
-  <button class="btn btn-default" e-click="computer_turn">Stand pat</button>
+  
