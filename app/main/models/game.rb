@@ -16,6 +16,10 @@ class Game < Volt::Model
     self
   end
 
+  def deal_card_to(hand)
+    hand << self.deck.pop
+  end
+
   private
 
   def build_deck
@@ -27,9 +31,5 @@ class Game < Volt::Model
       end
     end
     deck
-  end
-
-  def deal_card_to(hand)
-    hand << self.deck.pop
   end
 end

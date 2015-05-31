@@ -6,6 +6,10 @@ module Main
       page._game = Game.new.deal_hands
     end
 
+    def player_hit
+      page._game.deal_card_to(page._game.player_hand)
+    end
+
     private
 
     # The main template contains a #template binding that shows another
