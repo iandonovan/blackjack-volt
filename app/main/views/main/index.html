@@ -42,7 +42,7 @@
   </div>
   {{ if total(page._game.player.cards) <= 21 && page._game.winner_string.blank? }}
     <button class="btn btn-default" e-click="hit">Hit</button>
-    <button class="btn btn-default" e-click="computer_turn">Stand pat</button>
+    <button class="btn btn-default" e-click="computer_turn">Stay</button>
   {{ else }}
     <button class="btn btn-default" e-click="reset_game">Play again</button>
   {{ end }}
