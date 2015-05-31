@@ -1,5 +1,4 @@
 class Game < Volt::Model
-  field :score, Numeric
   field :deck
   field :player_hand
   field :dealer_hand
