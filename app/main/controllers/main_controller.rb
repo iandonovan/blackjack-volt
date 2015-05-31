@@ -2,6 +2,7 @@
 module Main
   class MainController < Volt::ModelController
     def index
+      page._player = Player.new(wins: 0, losses: 0)
       page._game = Game.new(score: 0).deal_hands
     end
 
