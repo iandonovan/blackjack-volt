@@ -8,6 +8,8 @@ class Game < Volt::Model
 
   def deal_hands
     self.deck = build_deck.shuffle
+    self.player_cards = []
+    self.dealer_cards = []
     2.times do
       deal_card_to(self.player_cards)
       deal_card_to(self.dealer_cards)
@@ -17,6 +19,12 @@ class Game < Volt::Model
 
   def deal_card_to(hand)
     hand << self.deck.pop
+  end
+
+  def total(hand)
+    values = hand.map{ |card| card.value }
+    values = check_ace_bust(values)
+    high_total = values.inject(:+)
   end
 
   private
@@ -31,4 +39,13 @@ class Game < Volt::Model
     end
     deck
   end
+
+  def check_ace_bust(values)
+    if values.inject(:+) > 21 && values.include?(11)
+      values[values.index(11)] = 1
+      check_ace_bust(values)
+    end
+    values
+  end
+
 end

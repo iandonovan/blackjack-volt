@@ -6,9 +6,19 @@ module Main
       page._game = Game.new.deal_hands
     end
 
-    def player_hit
+    def hit
       page._game.deal_card_to(page._game.player_cards)
     end
+
+    def total(hand)
+      page._game.total(hand)
+    end
+
+    def reset_game
+      page._player.losses += 1
+      page._game.deal_hands
+    end
+
 
     private
 
