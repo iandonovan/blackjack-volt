@@ -19,8 +19,6 @@ module Main
     end
 
     def reset_game
-      page._game.player.losses += 1
-      page._game.winner_string = "Computer wins!"
       page._game.deal_hands
     end
 

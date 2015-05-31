@@ -11,7 +11,7 @@ class Game < Volt::Model
   def deal_hands
     self.deck = build_deck.shuffle
     self.player.cards, self.cards = [], []
-    self.winner_string = nil
+    self.winner_string, self.current_player = nil, nil
     2.times do
       deal_card_to(player.cards)
       deal_card_to(self.cards)
@@ -21,6 +21,7 @@ class Game < Volt::Model
 
   def deal_card_to(hand)
     hand << self.deck.pop
+    check_bust(hand)
   end
 
   def total(hand)
@@ -30,13 +31,9 @@ class Game < Volt::Model
   end
 
   def computer_turn
-    self.current_player == "computer"
+    self.current_player = "computer"
     deal_card_to(self.cards) until total(self.cards) >= 17
-    winner_string = get_winner_string
-  end
-
-  def player_turn?
-    self.current_player != "computer"
+    determine_winner if self.winner_string.blank?
   end
 
   private
@@ -52,6 +49,16 @@ class Game < Volt::Model
     deck
   end
 
+  def check_bust(hand)
+    if total(hand) > 21
+      if current_player == "computer"
+        set_player_win
+      else
+        set_computer_win
+      end
+    end
+  end
+
   def check_ace_bust(values)
     if values.inject(:+) > 21 && values.include?(11)
       values[values.index(11)] = 1
@@ -60,12 +67,29 @@ class Game < Volt::Model
     values
   end
 
-  def get_winner_string
-    if total(self.cards) > 21 || total(player.cards) > total(self.cards)
-      "You Win!"
+  def determine_winner
+    if total(self.cards) == total(player.cards)
+      set_tie
+    elsif total(self.cards) > 21 || total(player.cards) > total(self.cards)
+      set_player_win
     else
-      "Computer Wins!"
+      set_computer_win
     end
+  end
+
+  def set_player_win
+    player.wins += 1
+    self.winner_string = "Dealer busts, you win!"
+  end
+
+  def set_computer_win
+    player.losses += 1
+    self.winner_string = "Computer wins!"
+  end
+
+  def set_tie
+    player.losses += 1
+    self.winner_string = "Tie goes to the dealer!"
   end
 
 end

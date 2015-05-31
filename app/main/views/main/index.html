@@ -11,11 +11,13 @@
 
   <h1>You are {{ page._game.player.wins }} and {{ page._game.player.losses }}</h1>
   <div class="card-set">
-    <strong>Dealer:</strong>
+    <strong>
+      Dealer: {{ total(page._game.cards) if page._game.current_player == "computer" }}
+    </strong>
     <ul class="playingCards simpleCards table">
       <div class="hand-lineup">
         {{ page._game.cards.each_with_index do |card, i| }}
-          {{ if i == 0 && page._game.player_turn? }}
+          {{ if i == 0 && page._game.current_player != "computer" }}
             <li class="card back">*</li>
           {{ else }}
             <:card rank="{{ card.rank }}"
@@ -27,7 +29,7 @@
     </ul>
   </div>
   <div class="card-set">
-    <strong>Your hand: ({{ total(page._game.player.cards) }})</strong>
+    <strong>Your hand: {{ total(page._game.player.cards) }}</strong>
     <ul class="playingCards simpleCards table">
       <div class="hand-lineup">
         {{ page._game.player.cards.each do |card| }}
@@ -38,7 +40,7 @@
       </div>
     </ul>
   </div>
-  {{ if total(page._game.player.cards) <= 21 }}
+  {{ if total(page._game.player.cards) <= 21 && page._game.winner_string.blank? }}
     <button class="btn btn-default" e-click="hit">Hit</button>
     <button class="btn btn-default" e-click="computer_turn">Stand pat</button>
   {{ else }}
