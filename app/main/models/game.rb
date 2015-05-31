@@ -8,14 +8,19 @@ class Game < Volt::Model
   SUITS = %w{ spades hearts clubs diams }
   RANKS = %w{ 2 3 4 5 6 7 8 9 10 J Q K A }
 
-  def deal_hands
+  def clean_state_vars!
     self.deck = build_deck.shuffle
     self.player.cards, self.cards = [], []
     self.winner_string, self.current_player = nil, nil
+  end
+
+  def fresh_game
+    clean_state_vars!
     2.times do
       deal_card_to(player.cards)
       deal_card_to(self.cards)
     end
+    check_for_blackjack!
     self
   end
 
@@ -49,6 +54,10 @@ class Game < Volt::Model
     deck
   end
 
+  def check_for_blackjack!
+    set_blackjack_win if total(self.cards) == 21
+  end
+
   def check_bust(hand)
     if total(hand) > 21
       if current_player == "computer"
@@ -77,19 +86,26 @@ class Game < Volt::Model
     end
   end
 
+  def set_tie
+    player.losses += 1
+    self.winner_string = "Tie goes to the dealer!"
+  end
+
   def set_player_win
     player.wins += 1
-    self.winner_string = "Dealer busts, you win!"
+    self.winner_string = "You win!"
   end
 
   def set_computer_win
     player.losses += 1
     self.winner_string = "Computer wins!"
+    self.current_player = "computer"
   end
 
-  def set_tie
+  def set_blackjack_win
     player.losses += 1
-    self.winner_string = "Tie goes to the dealer!"
+    self.winner_string = "Computer has blackjack!"
+    self.current_player = "computer"
   end
 
 end

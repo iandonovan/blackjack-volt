@@ -3,7 +3,7 @@ module Main
   class MainController < Volt::ModelController
     def index
       player = Player.new(wins: 0, losses: 0)
-      page._game = Game.new(player: player).deal_hands
+      page._game = Game.new(player: player).fresh_game
     end
 
     def hit
@@ -19,7 +19,7 @@ module Main
     end
 
     def reset_game
-      page._game.deal_hands
+      page._game.fresh_game
     end
 
     private
