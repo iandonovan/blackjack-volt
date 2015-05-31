@@ -5,19 +5,19 @@
   <h1>You are {{ page._player.wins }} and {{ page._player.losses }}</h1>
   <div class="card-set">
     <strong>Dealer:</strong>
-    <ul class="playingCards table">
+    <ul class="playingCards simpleCards table">
       <!-- Show the back of his first card -->
       <li class="card back">*</li>
-      <:card rank="{{ page._game.dealer_hand.last.rank }}"
-            suit="{{ page._game.dealer_hand.last.suit }}"
+      <:card rank="{{ page._game.dealer_cards.last.rank }}"
+            suit="{{ page._game.dealer_cards.last.suit }}"
       />
     </ul>
   </div>
   <div class="card-set">
     <strong>Your hand:</strong>
-    <ul class="playingCards table">
+    <ul class="playingCards simpleCards table">
       <div class="hand-lineup">
-        {{ page._game.player_hand.each do |card| }}
+        {{ page._game.player_cards.each do |card| }}
           <:card rank="{{ card.rank }}"
                 suit="{{ card.suit }}"
           />

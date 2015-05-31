@@ -7,7 +7,7 @@ module Main
     end
 
     def player_hit
-      page._game.deal_card_to(page._game.player_hand)
+      page._game.deal_card_to(page._game.player_cards)
     end
 
     private
