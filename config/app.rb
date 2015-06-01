@@ -4,9 +4,9 @@ Volt.configure do |config|
   #######################################
   # Basic App Info (stuff you should set)
   #######################################
-  config.domain = 'blackjack.com'
+  config.domain = 'blackjack-volt.herokuapp.com'
   config.app_name = 'Blackjack'
-  config.mailer.from = 'Blackjack <no-reply@blackjack.com>'
+  config.mailer.from = 'Blackjack <no-reply@blackjack-volt.herokuapp.com>'
 
   ############
   # App Secret
@@ -36,10 +36,14 @@ Volt.configure do |config|
   # Database config all start with db_ and can be set either in the config
   # file or with an environment variable (DB_NAME for example).
 
-  # config.db_driver = 'mongo'
-  # config.db_name = (config.app_name + '_' + Volt.env.to_s)
-  # config.db_host = 'localhost'
-  # config.db_port = 27017
+  config.db_driver = 'mongo'
+  config.db_name = (config.app_name + '_' + Volt.env.to_s)
+  if ENV["MONGOLAB_URI"].present?
+    config.db_uri = ENV["MONGOLAB_URI"]
+  else
+    config.db_host = 'localhost'
+    config.db_port = 27017
+  end
 
   #####################
   # Compression options
