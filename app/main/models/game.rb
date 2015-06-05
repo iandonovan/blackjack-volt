@@ -11,7 +11,7 @@ class Game < Volt::Model
   def clean_state_vars!
     self.deck = build_deck.shuffle
     self.player.cards, self.cards = [], []
-    self.winner_string, self.current_player = nil, nil
+    self.winner_string, self.current_player = nil, "player"
   end
 
   def fresh_game
@@ -31,7 +31,7 @@ class Game < Volt::Model
 
   def total(hand)
     values = hand.map{ |card| card.value }
-    values = check_ace_bust(values)
+    values = adjust_ace(values) if values.include?(11)
     high_total = values.inject(:+)
   end
 
@@ -68,10 +68,10 @@ class Game < Volt::Model
     end
   end
 
-  def check_ace_bust(values)
-    if values.inject(:+) > 21 && values.include?(11)
+  def adjust_ace(values)
+    if values.inject(:+) > 21
       values[values.index(11)] = 1
-      check_ace_bust(values)
+      adjust_ace(values)
     end
     values
   end
