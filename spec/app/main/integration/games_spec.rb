@@ -6,32 +6,47 @@ describe "game flow", type: :feature do
   before { visit "/" }
   describe "win/loss record" do
     it "shows initial score" do
-      expect(page).to have_content("You are 0 and 0")
+      expect(page.text).to match(/You are \d and \d/)
     end
-
-    it "tracks victories"
-      # the_page._game.player.wins = 1
-      # expect(page).to have_content("You are 1 and 0")
-    # end
-
-    it "tracks losses"
   end
 
   describe "dealer hand" do
-    it "shows the face-down card as an asterisk" do
-      expect(page).to have_content("*")
-    end
-
+    let(:dealer_cards) { find(".dealer-cards .card-set") }
     it "does not display dealer's total" do
-      expect(page).to have_content("Dealer:")
+      expect(dealer_cards).to have_content("Dealer:")
+      # This will fail if the dealer has blackjack. Gotta stub.
+      expect(dealer_cards.text).to_not match(/Dealer: \d{1,2}/)
     end
   end
 
   describe "player hand" do
-    it "shows the player's two cards"
-
+    let(:player_cards) { find(".player-cards .card-set") }
     it "shows the player's total" do
-      expect(page.text).to match(/Your hand: \d{1,2}/)
+      expect(player_cards.text).to match(/Your hand: \d{1,2}/)
+    end
+  end
+
+  describe "hitting" do
+    let(:player_hand) { find(".player-cards .card-set .hand-lineup") }
+    it "gives the player a new card" do
+      expect{ click_button('Hit') }.
+        to change { player_hand.text.length }.by(4),
+        "Adds a space, rank, space, suit"
+    end
+  end
+
+  describe "staying" do
+    let(:dealer_cards) { find(".dealer-cards .card-set") }
+    let(:dealer_hand) { find(".dealer-cards .card-set .hand-lineup") }
+    it "reveals computer's hidden card" do
+      expect{ click_button("Stay") }.
+        to change{ dealer_hand.text.count("*") }.by(-1),
+        "The face-down card is an asterisk. On reveal, it's not."
+    end
+
+    it "shows the dealer total" do
+      click_button("Stay")
+      expect(dealer_cards.text).to match(/Dealer: \d{1,2}/)
     end
   end
 

@@ -10,35 +10,39 @@
   {{ end }}
 
   <h1>You are {{ page._game.player.wins }} and {{ page._game.player.losses }}</h1>
-  <div class="card-set">
-    <strong>
-      Dealer: {{ total(page._game.cards) if page._game.current_player == "computer" }}
-    </strong>
-    <ul class="playingCards simpleCards table">
-      <div class="hand-lineup">
-        {{ page._game.cards.each_with_index do |card, i| }}
-          {{ if i == 0 && page._game.current_player != "computer" }}
-            <li class="card back">*</li>
-          {{ else }}
+  <div class="dealer-cards">
+    <div class="card-set">
+      <strong>
+        Dealer: {{ total(page._game.cards) if page._game.current_player == "computer" }}
+      </strong>
+      <ul class="playingCards simpleCards table">
+        <div class="hand-lineup">
+          {{ page._game.cards.each_with_index do |card, i| }}
+            {{ if i == 0 && page._game.current_player != "computer" }}
+              <li class="card back">*</li>
+            {{ else }}
+              <:card rank="{{ card.rank }}"
+                  suit="{{ card.suit }}"
+              />
+            {{ end }}
+          {{ end }}
+        </div>
+      </ul>
+    </div>
+  </div>
+  <div class="player-cards">
+    <div class="card-set">
+      <strong>Your hand: {{ total(page._game.player.cards) }}</strong>
+      <ul class="playingCards simpleCards table">
+        <div class="hand-lineup">
+          {{ page._game.player.cards.each do |card| }}
             <:card rank="{{ card.rank }}"
-                suit="{{ card.suit }}"
+                  suit="{{ card.suit }}"
             />
           {{ end }}
-        {{ end }}
-      </div>
-    </ul>
-  </div>
-  <div class="card-set">
-    <strong>Your hand: {{ total(page._game.player.cards) }}</strong>
-    <ul class="playingCards simpleCards table">
-      <div class="hand-lineup">
-        {{ page._game.player.cards.each do |card| }}
-          <:card rank="{{ card.rank }}"
-                suit="{{ card.suit }}"
-          />
-        {{ end }}
-      </div>
-    </ul>
+        </div>
+      </ul>
+    </div>
   </div>
   {{ if total(page._game.player.cards) <= 21 && page._game.winner_string.blank? }}
     <button class="btn btn-default" e-click="hit">Hit</button>
