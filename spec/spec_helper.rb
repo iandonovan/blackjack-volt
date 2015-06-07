@@ -1,3 +1,6 @@
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
+
 # Volt sets up rspec and capybara for testing.
 require 'volt/spec/setup'
 Volt.spec_setup

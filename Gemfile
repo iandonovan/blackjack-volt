@@ -29,6 +29,7 @@ group :test do
   gem 'selenium-webdriver', '~> 2.43.0'
   gem 'chromedriver2-helper', '~> 0.0.8'
   gem 'poltergeist', '~> 1.5.0'
+  gem "codeclimate-test-reporter", require: false
 end
 
 # Server for MRI

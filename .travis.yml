@@ -1,0 +1,11 @@
+language: ruby
+cache: bundler
+before_script:
+after_script:
+rvm:
+  - 2.2.1
+addons:
+  code_climate:
+    repo_token: c01632c0f1318666173fa2c4e097cb549364bae47a34061153bf5eae62bea174
+script:
+  - BROWSER=phantom bundle exec rspec
