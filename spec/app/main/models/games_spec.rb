@@ -146,8 +146,7 @@ describe Game do
 
     context "when computer does not bust" do
       it "determines the winner" do
-        game.cards = [ten, eight]
-        player.cards = [ten, six]
+        game.winner_string = ""
         expect(game).to receive(:determine_winner)
         game.computer_turn
       end
